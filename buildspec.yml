@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Copy .env.$ENV to .env
+      - cp .env.$ENV .env
+      - echo remove else
+      - rm .env.*
+      - cat .env
+      - echo Build started on `date`
+      - npm run build
+  post_build:
+    commands:
+      - echo $(pwd)
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no

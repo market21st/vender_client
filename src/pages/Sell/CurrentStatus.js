@@ -90,23 +90,21 @@ const CurrentStatus = ({ isOpen, onClose, text }) => {
   const rows = [
     {
       id: 1,
-      color: "핑크",
-      stock: "12개",
+      name: "비공개",
+      price: "1000원",
+      stock: "12",
     },
     {
       id: 2,
-      color: "레드",
-      stock: "12개",
+      name: "비공개",
+      price: "1000원",
+      stock: "12",
     },
     {
       id: 3,
-      color: "그린",
-      stock: "12개",
-    },
-    {
-      id: 4,
-      color: "블랙",
-      stock: "12개",
+      name: "비공개",
+      price: "1000원",
+      stock: "12",
     },
   ];
   const sellColumns = [
@@ -139,7 +137,10 @@ const CurrentStatus = ({ isOpen, onClose, text }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
           {text}
         </Typography>
-
+        <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
+          {rows.length == 0 ? "등록 업체 없음" : null}
+        </Typography>
+        {/* rows없을때 등록 업체가 없습니다. 추가 */}
         <DataGrid
           sx={gridBtm}
           autoHeight
@@ -148,7 +149,7 @@ const CurrentStatus = ({ isOpen, onClose, text }) => {
           columns={sellColumns}
           disableColumnMenu
         />
-        <Grid container justifyContent={"center"}>
+        <Grid container justifyContent={"center"} mt={3}>
           <Buttons
             variant="outlined"
             sx={{ marginRight: "3px", width: "100%" }}

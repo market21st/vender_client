@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Box, Typography } from "@mui/material";
+import { Modal, Button, Box, Typography, Grid } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -27,11 +27,14 @@ const AlertModal = ({ isOpen, onClose, text }) => {
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal
+          {text}
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
+        <Grid container justifyContent={"flex-end"} mt={3}>
+          <Button variant="outlined" sx={{ marginRight: "13px" }}>
+            아니요
+          </Button>
+          <Button variant="outlined">네</Button>
+        </Grid>
       </Box>
     </Modal>
   );

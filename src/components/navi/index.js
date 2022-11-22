@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "@components/AlertModa";
@@ -50,8 +50,16 @@ const Nav = () => {
         text={"로그아웃되었습니다."}
       />
       <Grid textAlign={"right"}>
-        <Title item>21세기전파상</Title>
-        <GridTop item>판매관리</GridTop>
+        <Title item>
+          <Link href="/" underline="none" color={"#000"}>
+            21세기전파상
+          </Link>
+        </Title>
+        <GridTop item>
+          <Link href="/sell" underline="none" color={"#000"}>
+            판매관리
+          </Link>
+        </GridTop>
         <GridTop item>밴더관리</GridTop>
       </Grid>
       <Grid textAlign={"right"}>

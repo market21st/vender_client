@@ -11,30 +11,17 @@ const LogIn = loadable(() => import("@pages/LogIn"), {
 const Signup = loadable(() => import("@pages/Signup"));
 const Home = loadable(() => import("@pages/Home"));
 const Nav = loadable(() => import("@components/navi"));
-const App = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  // const [visible, setVisible] = useState(false);
+const SellList = loadable(() => import("@pages/Sell"));
 
-  // const { bears, increasePopulation } = useBearStore(
-  //   (state) => ({
-  //     bears: state.bears,
-  //     increasePopulation: state.increasePopulation,
-  //   }),
-  //   shallow
-  // );
-  // console.log(bears);
+const App = () => {
   return (
     <>
-      {/* <div>
-        <Button variant="contained" onClick={increasePopulation}>
-          Hello World {bears}
-         </Button>
-       </div> */}
       <GlobalStyles />
       <Nav />
       <Routes>
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/sell" element={<SellList />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </>

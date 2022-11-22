@@ -18,5 +18,10 @@ phases:
       - echo $(pwd)
 artifacts:
   files:
-    - '**/*'
+    - 'build/**/*'
+    - 'node_modules/**/*'
+    - 'scripts/*'
+    - 'appspec.yml'
+    - 'package.json'
+    - 'server.js'
   discard-paths: no

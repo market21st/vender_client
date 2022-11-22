@@ -23,5 +23,6 @@ artifacts:
     - 'scripts/*'
     - 'appspec.yml'
     - 'package.json'
+    - 'ecosystem.config.js'
     - 'server.js'
   discard-paths: no

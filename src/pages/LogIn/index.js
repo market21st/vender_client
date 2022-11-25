@@ -7,7 +7,6 @@ import {
   IconButton,
   FormControl,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
@@ -15,6 +14,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "@components/AlertModa";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
+import { LoginUser } from "../../api/user";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -32,12 +34,6 @@ const LogIn = () => {
     color: theme.palette.primary.main,
   }));
 
-  // 회원가입 클릭시
-  const onClick = () => {
-    console.log("링크 이동");
-    //navigate('/signup')
-  };
-
   //비밀번호
   const [values, setValues] = useState({
     amount: "",
@@ -46,6 +42,10 @@ const LogIn = () => {
     weightRange: "",
     showPassword: false,
   });
+
+  const onClick = () => {
+    navigate("/signup");
+  };
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -62,12 +62,41 @@ const LogIn = () => {
     event.preventDefault();
   };
 
+  const [authInfo, setAuthInfo] = useState();
+
   // 로그인 클릭
-  const loginClick = async () => {
-    if (!idRef.current.value || !pwRef.current.value) {
-      console.log("id확인/Pw확인");
-      // setOpenModal1(true); 에러 모달
+  const login = async (e) => {
+    if (e) e.preventDefault();
+    const id = idRef.current.value;
+    const pw = pwRef.current.value;
+    if (!id || !pw) {
+      setModalText("아이디/비밀번호를 입력해주세요.");
+      setOpenModal1(true);
       return;
+    }
+
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, id, pw);
+      const { uid } = user;
+      const { data, message } = await LoginUser({ firebaseUid: uid });
+      if (message == "OK") {
+        window.location.reload();
+        navigate("/");
+      }
+    } catch ({ message }) {
+      if (message.includes("wrong-password")) {
+        setModalText("아이디/비밀번호를 확인해주세요.");
+        return;
+      }
+      if (message.includes("invalid-email")) {
+        setModalText("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+        return;
+      }
+      if (message.includes("user-not-found")) {
+        setModalText("존재하지 않는 회원입니다.");
+        return;
+      }
+      setOpenModal1(true);
     }
 
     // const { data, statusCode } = await OrderListApi(searchList);
@@ -80,14 +109,10 @@ const LogIn = () => {
     //     setPage(1);
     //   }
     // }
-    const userInfo = {
-      id: idRef.current.value,
-      pw: pwRef.current.value,
-    };
-    console.log(userInfo);
   };
   // 배송준비중
   const [openModal1, setOpenModal1] = useState(false);
+  const [modalText, setModalText] = useState("false");
   const modalHandleClose = () => setOpenModal1(false);
 
   return (
@@ -95,7 +120,8 @@ const LogIn = () => {
       <AlertModal
         isOpen={openModal1}
         onClose={modalHandleClose}
-        text={"배송준비중으로 변경하시겠습니까?"}
+        text={modalText}
+        // closeBtn={false}
       />
       <Grid item xs={8}></Grid>
       <Grid container item xs={4} padding={"0 30px"} alignItems={"center"}>
@@ -136,7 +162,7 @@ const LogIn = () => {
             variant="contained"
             fullWidth
             sx={{ marginTop: 3 }}
-            onClick={loginClick}
+            onClick={login}
           >
             로그인
           </Button>

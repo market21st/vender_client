@@ -1,4 +1,5 @@
 import { Button, Grid } from "@mui/material";
+import { reload } from "firebase/auth";
 
 const SearchButtons = ({ onSearch, urlEvent, onReset, wd }) => {
   return (
@@ -26,7 +27,9 @@ const SearchButtons = ({ onSearch, urlEvent, onReset, wd }) => {
         variant="outlined"
         color="secondary"
         style={{ padding: "6px 0", width: wd || "10%", margin: "10px" }}
-        onClick={onReset}
+        onClick={() => {
+          window.location.reload();
+        }}
       >
         초기화
       </Button>

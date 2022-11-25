@@ -12,21 +12,15 @@ import {
   TextField,
   Select,
   FormControl,
-  Button,
   Box,
   MenuItem,
 } from "@mui/material";
 import SearchButtons from "./SearchButtons";
 import sellColumns from "@utils/sellColumns";
+import { Listing } from "../../api/sell";
 
 const SellList = () => {
   const navigator = useNavigate();
-
-  const Title = styled(Grid)(({ theme }) => ({
-    padding: "35px 15px",
-    fontSize: "18px",
-    borderBottom: "1px solid #ddd",
-  }));
 
   const gridBtm = {
     "& .MuiDataGrid-columnHeaderTitleContainer": {
@@ -43,92 +37,57 @@ const SellList = () => {
     },
   };
 
-  const ref = useRef();
-
-  // 이름
-  const [userName, setUserName] = useState("");
-  // select 박스
-  const handleChange = (event) => {
-    setUserState(event.target.value);
-  };
-  const [userState, setUserState] = useState([]);
-
-  const handleChange1 = (event) => {
-    setUserState1(event.target.value);
-  };
-  const [userState1, setUserState1] = useState([]);
-
-  // 전화번호
-  const [userPhone, setUserPhone] = useState("");
-
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
-
-  // 클릭시 상세보기
-  const [page, setPage] = useState(1);
-  const [pageBtn, setPageBtn] = useState(1);
-
-  const handleChangess = async (event, value) => {
-    setPageBtn(value);
-    setPage(value);
-  };
+  //필터
+  const [searchList, setSearchList] = useState({
+    name: "",
+    isRegistered: "전체",
+    grade: "전체",
+  });
+  const { name, isRegistered, grade } = searchList;
+  function onChange(e) {
+    const { value, name } = e.target;
+    setSearchList({
+      ...searchList,
+      [name]: value,
+    });
+  }
 
   const handleRowClick = (params) => {
     navigator(`/user/item/${params.row.id}`);
   };
-  const rowsData = data.map((e, i) => {
+
+  // 조회한 데이터
+  const [data, setData] = useState([]);
+  const rowsData = data?.map((e, i) => {
     return {
       id: e.id,
-      num: page === 1 ? i + 1 : `${page}${i}`,
+      num: i + 1,
       name: e.name,
-      birthday: e.birthday,
-      phone: e.phone,
-      stateText: e.stateText,
-      createdAt: `${e.createdAt.split("T")[0]} ${e.createdAt.substring(
-        11,
-        19
-      )}`,
+      state: e.grade,
+      price: e.price || "-원",
+      stock: e.stock,
     };
   });
 
-  const rows = [
-    {
-      id: 1,
-      num: 1,
-      name: "아이폰",
-      state: "A",
-      price: "549,000",
-      stock: "12개",
-    },
-    {
-      id: 2,
-      num: 1,
-      name: "아이폰",
-      state: "A",
-      price: "1,549,000",
-      stock: "12개",
-    },
-  ];
-
-  // 검색
+  // 조회
   const getSearch = async (e) => {
     if (e) e.preventDefault();
-    const searchList = {
-      num: 1,
-      name: "아이폰",
-      state: "A",
-      price: "549,000",
-      stock: "12개",
-      register: "",
-      current: "",
-      //   isWithdrawal: userState === "탈퇴회원" ? true : false,
+    const list = {
+      name: name,
+      isRegistered:
+        isRegistered === "전체" ? "" : isRegistered === "등록" ? true : false,
+      grade: grade === "전체" ? "" : grade,
     };
-    // const { data, statusCode } = await getUserListApi(searchList);
-    // if (statusCode === 200) {
-    //   setTotal(data?.total || 0);
-    //   setData(data?.results || []);
-    // }
+    const { data, statusCode } = await Listing(list);
+    if (statusCode === 200) {
+      setData(data || []);
+    }
   };
+
+  useEffect(() => {
+    getSearch();
+  }, []);
+
   return (
     <Grid container spacing={1} sx={{ p: 3 }}>
       <Grid item xs={12} mb={2}>
@@ -144,11 +103,11 @@ const SellList = () => {
                   <Grid item xs={8}>
                     <TextField
                       fullWidth
+                      id="name"
+                      name="name"
                       size="small"
-                      value={userName}
-                      onChange={(e) => {
-                        setUserName(e.target.value);
-                      }}
+                      value={searchList.name}
+                      onChange={onChange}
                     />
                   </Grid>
                 </Grid>
@@ -159,17 +118,22 @@ const SellList = () => {
                   <Grid item xs={5}>
                     <FormControl fullWidth>
                       <Select
-                        value={userState1}
+                        id="isRegistered"
+                        value={searchList.isRegistered}
+                        name="isRegistered"
                         size="small"
-                        onChange={handleChange1}
+                        onChange={onChange}
                         displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
                       >
-                        <MenuItem value="">
-                          <em>전체</em>
+                        <MenuItem value="전체" name="전체">
+                          전체
                         </MenuItem>
-                        <MenuItem value={"등록"}>등록</MenuItem>
-                        <MenuItem value={"미등록"}>미등록</MenuItem>
+                        <MenuItem value="등록" name="등록">
+                          등록
+                        </MenuItem>
+                        <MenuItem value="미등록" name="미등록">
+                          미등록
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -181,17 +145,25 @@ const SellList = () => {
                   <Grid item xs={8}>
                     <FormControl fullWidth>
                       <Select
-                        value={userState}
+                        id="grade"
+                        name="grade"
+                        value={searchList.grade}
                         size="small"
-                        onChange={handleChange}
+                        onChange={onChange}
                         displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
                       >
-                        <MenuItem value="">
-                          <em>전체</em>
+                        <MenuItem value="전체" name="전체">
+                          전체
                         </MenuItem>
-                        <MenuItem value={"A"}>A</MenuItem>
-                        <MenuItem value={"A-"}>A-</MenuItem>
+                        <MenuItem value="A" name="A">
+                          A
+                        </MenuItem>
+                        <MenuItem value="A-" name="A-">
+                          A-
+                        </MenuItem>
+                        <MenuItem value="B+" name="B+">
+                          B+
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -225,7 +197,7 @@ const SellList = () => {
             <DataGrid
               sx={gridBtm}
               autoHeight
-              rows={rows}
+              rows={rowsData}
               columns={sellColumns}
               //   experimentalFeatures={{ newEditingApi: true }}
               cell--textCenter

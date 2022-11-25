@@ -73,9 +73,10 @@ function ChildModals() {
   );
 }
 
-const RegisterModal = ({ isOpen, onClose, text }) => {
+const RegisterModal = ({ isOpen, onClose, text, stock }) => {
   const [open, setOpen] = React.useState(false);
   const [s, ss] = useState(0);
+  // const [list, setList] = useState(stock);
 
   const [openModal1, setOpenModal1] = useState(false);
   const modalHandleClose = () => setOpenModal1(false);
@@ -199,10 +200,11 @@ const RegisterModal = ({ isOpen, onClose, text }) => {
         <DataGrid
           sx={gridBtm}
           autoHeight
-          rows={rows}
+          rows={stock}
           cell--textCenter
           columns={sellColumns}
           disableColumnMenu
+          getRowId={(row) => row.internalId}
         />
         <Grid container justifyContent={"flex-end"} mt={10}>
           <Buttons variant="outlined" sx={{ marginRight: "13px" }}>

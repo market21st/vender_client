@@ -3,6 +3,8 @@ import { Grid, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "@components/AlertModa";
+import { Cookies } from "react-cookie";
+export const cookies = new Cookies();
 
 const Nav = () => {
   const navigator = useNavigate();
@@ -27,7 +29,8 @@ const Nav = () => {
   const [islogout, setIsLogout] = useState(false);
   const modalHandleClose = () => {
     setIsLogout(false);
-    navigator("/login");
+    window.location.reload();
+    navigator("/");
   };
 
   return (
@@ -39,8 +42,8 @@ const Nav = () => {
         borderRight: "1px solid #ddd",
         borderLeft: "1px solid #ddd",
         width: "12rem",
-        height: "100vh",
-        position: "absolute",
+        height: "101vh",
+        position: "fixed",
         left: 0,
       }}
     >
@@ -67,6 +70,8 @@ const Nav = () => {
         <GridBtm
           item
           onClick={() => {
+            cookies.remove("refreshToken");
+            cookies.remove("accessToken");
             setIsLogout(true);
           }}
         >

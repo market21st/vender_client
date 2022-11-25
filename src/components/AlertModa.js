@@ -13,7 +13,7 @@ const style = {
   p: 4,
 };
 
-const AlertModal = ({ isOpen, onClose, text }) => {
+const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -30,10 +30,15 @@ const AlertModal = ({ isOpen, onClose, text }) => {
           {text}
         </Typography>
         <Grid container justifyContent={"flex-end"} mt={3}>
-          <Button variant="outlined" sx={{ marginRight: "13px" }}>
-            아니요
+          {closeBtn && (
+            <Button variant="outlined" sx={{ marginRight: "13px" }}>
+              아니요
+            </Button>
+          )}
+
+          <Button variant="outlined" onClick={onClose}>
+            네
           </Button>
-          <Button variant="outlined">네</Button>
         </Grid>
       </Box>
     </Modal>

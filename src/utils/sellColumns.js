@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { DataGrid, GridColDef, GridApi, GridCellValue } from "@mui/x-data-grid";
 import { useState } from "react";
-import { getStock } from "src/api/sell";
+import { getCorp, getStock } from "src/api/sell";
 // components
 import RegisterModal from "@pages/Sell/RegisterModal";
 import CurrentStatus from "@pages/Sell/CurrentStatus";
@@ -36,7 +36,7 @@ function Counter({ params }) {
         가격/재고
       </Button>
       <RegisterModal
-        stock={colorList}
+        stockState={colorList}
         isOpen={islogout}
         onClose={modalHandleClose}
         text={"가격/재고 등록"}
@@ -45,12 +45,17 @@ function Counter({ params }) {
   );
 }
 
-function List() {
+function List({ params }) {
   const [islogout, setIsLogout] = useState(false);
+  const [corp, setCorp] = useState([]);
   const modalHandleClose = () => {
     setIsLogout(false);
   };
-  const modalHandleOpen = () => {
+  const modalHandleOpen = async () => {
+    const { data, statusCode } = await getCorp(params.row.id);
+    if (statusCode === 200) {
+      setCorp(data || []);
+    }
     setIsLogout(true);
   };
   return (
@@ -66,6 +71,7 @@ function List() {
         판매 현황
       </Button>
       <CurrentStatus
+        stockState={corp || []}
         isOpen={islogout}
         onClose={modalHandleClose}
         text={"판매 현황"}
@@ -118,7 +124,7 @@ const sellColumns = [
         console.log(params.id);
       };
 
-      return <List />;
+      return <List params={params} />;
     },
   },
 ];

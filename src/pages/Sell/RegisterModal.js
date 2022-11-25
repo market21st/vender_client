@@ -46,9 +46,10 @@ const Buttons = styled(Button)(({ theme }) => ({
 }));
 
 //확인 모달
-function ChildModals() {
+function ChildModals({ stockLists }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
+    console.log(stockLists);
     setOpen(true);
   };
   const handleClose = () => {
@@ -73,10 +74,9 @@ function ChildModals() {
   );
 }
 
-const RegisterModal = ({ isOpen, onClose, text, stock }) => {
+const RegisterModal = ({ isOpen, onClose, text, stockState }) => {
   const [open, setOpen] = React.useState(false);
   const [s, ss] = useState(0);
-  // const [list, setList] = useState(stock);
 
   const [openModal1, setOpenModal1] = useState(false);
   const modalHandleClose = () => setOpenModal1(false);
@@ -85,15 +85,6 @@ const RegisterModal = ({ isOpen, onClose, text, stock }) => {
   // 리스트 추가(저장 클릭시)
   const addList = () => {
     const list = {};
-  };
-
-  // 가격/재고 조회
-  const getList = () => {
-    // const { data, statusCode } = await getUserListApi(searchList);
-    // if (statusCode === 200) {
-    //   setTotal(data?.total || 0);
-    //   setData(data?.results || []);
-    // }
   };
 
   // style
@@ -116,28 +107,22 @@ const RegisterModal = ({ isOpen, onClose, text, stock }) => {
       display: "none",
     },
   };
-  const rows = [
-    {
-      id: 1,
-      color: "핑크",
-      stock: "12개",
-    },
-    {
-      id: 2,
-      color: "레드",
-      stock: "12개",
-    },
-    {
-      id: 3,
-      color: "그린",
-      stock: "12개",
-    },
-    {
-      id: 4,
-      color: "블랙",
-      stock: "12개",
-    },
-  ];
+
+  const [stockList, setStockList] = useState({
+    stock: "",
+    price: "",
+    color: "",
+  });
+
+  const { stock, color } = stockList;
+  function onChange(e) {
+    const { value, name } = e.target;
+    setStockList({
+      ...stockList,
+      [name]: value,
+    });
+  }
+
   const sellColumns = [
     {
       field: "color",
@@ -149,20 +134,16 @@ const RegisterModal = ({ isOpen, onClose, text, stock }) => {
       headerName: "재고",
       width: 200,
       renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation();
-          console.log(params.id);
-        };
-        const change = (e) => {
-          ss(e.target.value);
-        };
+        const { color, stock } = params.row;
 
         return (
           <>
             <TextField
+              name={color}
+              defaultValue={stock}
               size="small"
-              value={s}
-              onChange={change}
+              // value={stock}
+              onChange={onChange}
               sx={{ width: "4rem" }}
             />
             <Typography ml={1}>개</Typography>
@@ -200,7 +181,7 @@ const RegisterModal = ({ isOpen, onClose, text, stock }) => {
         <DataGrid
           sx={gridBtm}
           autoHeight
-          rows={stock}
+          rows={stockState}
           cell--textCenter
           columns={sellColumns}
           disableColumnMenu
@@ -217,7 +198,7 @@ const RegisterModal = ({ isOpen, onClose, text, stock }) => {
           >
             닫기
           </Buttons>
-          <ChildModals />
+          <ChildModals stockLists={stockList} />
         </Grid>
       </Box>
     </Modal>

@@ -24,49 +24,12 @@ const style = {
   p: 4,
 };
 
-const Item = styled(InputLabel)(({ theme }) => ({
-  width: "5rem",
-  color: theme.palette.text.secondary,
-}));
-
-const Item2 = styled(TextField)(({ theme }) => ({
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  width: "6rem",
-}));
-
-const Stacks = styled(Stack)(({ theme }) => ({
-  alignItems: "center",
-  marginBottom: "10px",
-}));
-
 const Buttons = styled(Button)(({ theme }) => ({
   color: "#4b4b4b",
   borderColor: "#4b4b4b",
 }));
 
-const CurrentStatus = ({ isOpen, onClose, text }) => {
-  const [open, setOpen] = React.useState(false);
-  const [s, ss] = useState(0);
-
-  const [openModal1, setOpenModal1] = useState(false);
-  const modalHandleClose = () => setOpenModal1(false);
-
-  const a = 1;
-  // 리스트 추가(저장 클릭시)
-  const addList = () => {
-    const list = {};
-  };
-
-  // 가격/재고 조회
-  const getList = () => {
-    // const { data, statusCode } = await getUserListApi(searchList);
-    // if (statusCode === 200) {
-    //   setTotal(data?.total || 0);
-    //   setData(data?.results || []);
-    // }
-  };
-
+const CurrentStatus = ({ isOpen, onClose, text, stockState }) => {
   // style
   const gridBtm = {
     "& .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop": {
@@ -87,26 +50,7 @@ const CurrentStatus = ({ isOpen, onClose, text }) => {
       display: "none",
     },
   };
-  const rows = [
-    {
-      id: 1,
-      name: "비공개",
-      price: "1000원",
-      stock: "12",
-    },
-    {
-      id: 2,
-      name: "비공개",
-      price: "1000원",
-      stock: "12",
-    },
-    {
-      id: 3,
-      name: "비공개",
-      price: "1000원",
-      stock: "12",
-    },
-  ];
+
   const sellColumns = [
     {
       field: "name",
@@ -138,16 +82,17 @@ const CurrentStatus = ({ isOpen, onClose, text }) => {
           {text}
         </Typography>
         <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
-          {rows.length == 0 ? "등록 업체 없음" : null}
+          {stockState?.length == 0 ? "등록 업체 없음" : null}
         </Typography>
-        {/* rows없을때 등록 업체가 없습니다. 추가 */}
+
         <DataGrid
           sx={gridBtm}
           autoHeight
-          rows={rows}
+          rows={stockState}
           cell--textCenter
-          columns={sellColumns}
+          columns={sellColumns || []}
           disableColumnMenu
+          getRowId={(row) => row.fkVendorId}
         />
         <Grid container justifyContent={"center"} mt={3}>
           <Buttons

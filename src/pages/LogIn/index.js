@@ -98,17 +98,6 @@ const LogIn = () => {
       }
       setOpenModal1(true);
     }
-
-    // const { data, statusCode } = await OrderListApi(searchList);
-    // if (statusCode === 200) {
-    //   setTotal(data?.total || 0);
-    //   setData(data?.results || []);
-    //   setChk(false);
-    //   if (data.pageTotal === 0) {
-    //     setPageBtn(1);
-    //     setPage(1);
-    //   }
-    // }
   };
   // 배송준비중
   const [openModal1, setOpenModal1] = useState(false);

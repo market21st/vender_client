@@ -50,7 +50,7 @@ export const getRefreshToken = async (params) => {
   } catch (e) {
     cookies.remove("refreshToken");
     cookies.remove("accessToken");
-    window.location.href = "/login";
+    window.location.href = "/";
     console.log(e);
   }
 };

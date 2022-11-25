@@ -17,7 +17,6 @@ function Counter({ params }) {
   const onClick = async () => {
     const { data, statusCode } = await getStock(params.row.id);
     if (statusCode === 200) {
-      console.log(data.colors);
       setColorList(data.colors || []);
     }
     setIsLogout(true);

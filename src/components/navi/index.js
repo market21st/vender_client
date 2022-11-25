@@ -33,6 +33,10 @@ const Nav = () => {
     navigator("/");
   };
 
+  const getBiz = () => {
+    window.open(window.localStorage.getItem("bizFile", "_blank"));
+  };
+
   return (
     <Grid
       container
@@ -42,7 +46,7 @@ const Nav = () => {
         borderRight: "1px solid #ddd",
         borderLeft: "1px solid #ddd",
         width: "12rem",
-        height: "101vh",
+        height: "100vh",
         position: "fixed",
         left: 0,
       }}
@@ -66,7 +70,9 @@ const Nav = () => {
         <GridTop item>밴더관리</GridTop>
       </Grid>
       <Grid textAlign={"right"}>
-        <GridBtm item>21세기전파상 사업자등록증 다운로드</GridBtm>
+        <GridBtm item onClick={getBiz}>
+          21세기전파상 사업자등록증 다운로드
+        </GridBtm>
         <GridBtm
           item
           onClick={() => {

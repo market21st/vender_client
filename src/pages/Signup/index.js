@@ -41,16 +41,7 @@ const Stacks = styled(Stack)(({ theme }) => ({
 const Signup = () => {
   const navigate = useNavigate();
 
-  // const [detailUrl, setdetailUrl] = useState("");
   const [detailFile, setDetailFile] = useState("");
-
-  // // 사업자등록증
-  // const detailPreview = () => {
-  //   // if (!detailFile) return false;
-  //   // const reader = new FileReader();
-  //   // reader.readAsDataURL(detailFile[0]);
-  //   setdetailUrl(detailFile[0]);
-  // };
 
   // 파이어베이스 회원가입
   const [autoInfo, setAuthInfo] = useState({

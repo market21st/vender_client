@@ -24,12 +24,22 @@ export const EmailCheck = async (params) => {
   }
 };
 
+export const userInfo = async () => {
+  try {
+    const res = await instance.get(`/listing/stat`);
+
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const LoginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/signin`, params);
-    console.log(res);
+
     const today = new Date();
-    const expireDate = today.setDate(today.getDate() + 7);
+    const expireDate = today.setDate(today.getDate() + 1);
 
     cookies.set("accessToken", res.data.data.accessToken, {
       secure: false,
@@ -43,6 +53,7 @@ export const LoginUser = async (params) => {
       expires: new Date(expireDate),
       path: "/",
     });
+    window.localStorage.setItem("bizFile", res.data.data.bizFile);
     return res.data;
   } catch (e) {
     console.log(e);

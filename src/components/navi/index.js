@@ -67,7 +67,6 @@ const Nav = () => {
             판매관리
           </Link>
         </GridTop>
-        <GridTop item>밴더관리</GridTop>
       </Grid>
       <Grid textAlign={"right"}>
         <GridBtm item onClick={getBiz}>

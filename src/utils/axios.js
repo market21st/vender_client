@@ -13,6 +13,7 @@ instance.interceptors.request.use(
     return res;
   },
   function (e) {
+    console.log(e);
     return Promise.reject(e);
   }
 );
@@ -22,6 +23,7 @@ instance.interceptors.response.use(
     return res;
   },
   function (e) {
+    console.log(e);
     if (e.response.data.statusCode === 401) {
       getRefreshToken();
       return;
@@ -33,19 +35,29 @@ instance.interceptors.response.use(
 export const getRefreshToken = async (params) => {
   try {
     console.log(`${cookies.get("refreshToken")}`);
-    const res = await axios.get(
+    const token = `${cookies.get("refreshToken")}`;
+    const res = await axios.post(
       `https://dev-apis.kracker.kr/vendor/auth/getAccessToken`,
+      { refreshToken: token },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.get("accessToken")}`,
         },
-        body: JSON.stringify({
-          refreshToken: `${cookies.get("refreshToken")}`,
-        }),
       }
     );
-    console.log(res);
+    const today = new Date();
+    const expireDate = today.setDate(today.getDate() + 1);
+    cookies.set("accessToken", res.data.data.accessToken, {
+      secure: false,
+      expires: new Date(expireDate),
+      path: "/",
+    });
+    cookies.set("refreshToken", res.data.data.refreshToken, {
+      secure: false,
+      expires: new Date(expireDate),
+      path: "/",
+    });
+    window.location.reload();
     return res.data;
   } catch (e) {
     cookies.remove("refreshToken");

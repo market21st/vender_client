@@ -31,12 +31,14 @@ export const userInfo = async () => {
     return res.data;
   } catch (e) {
     console.log(e);
+    return;
   }
 };
 
 export const LoginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/signin`, params);
+    console.log(res);
 
     const today = new Date();
     const expireDate = today.setDate(today.getDate() + 1);

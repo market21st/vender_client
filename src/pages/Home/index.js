@@ -7,7 +7,7 @@ const Home = () => {
   const getInfo = async () => {
     const { data, statusCode } = await userInfo();
     if (statusCode === 200) {
-      setInfo(data);
+      setInfo(data || []);
     }
   };
 

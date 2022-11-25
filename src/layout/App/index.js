@@ -21,7 +21,7 @@ const App = () => {
   return (
     <>
       <GlobalStyles />
-      {cookies.get("accessToken") ? (
+      {cookies.get("refreshToken") ? (
         <>
           <Nav />
           <Routes>

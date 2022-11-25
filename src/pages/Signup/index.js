@@ -15,10 +15,6 @@ import {
   Stack,
 } from "@mui/material";
 
-// const auth = getAuth();
-// // const user = auth.currentUser;
-// console.log(auth);
-
 const Label = styled(InputLabel)(({ theme }) => ({
   width: "8rem",
   color: theme.palette.text.secondary,
@@ -39,8 +35,6 @@ const Stacks = styled(Stack)(({ theme }) => ({
 }));
 
 const Signup = () => {
-  const navigate = useNavigate();
-
   const [detailFile, setDetailFile] = useState("");
 
   // 파이어베이스 회원가입

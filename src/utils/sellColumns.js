@@ -6,6 +6,7 @@ import { getCorp, getStock } from "src/api/sell";
 import RegisterModal from "@pages/Sell/RegisterModal";
 import CurrentStatus from "@pages/Sell/CurrentStatus";
 
+// 가격/재고 버튼
 function Counter({ params }) {
   const [islogout, setIsLogout] = useState(false);
   const modalHandleClose = () => {
@@ -15,9 +16,12 @@ function Counter({ params }) {
   const [colorList, setColorList] = useState([]);
 
   const onClick = async () => {
+    console.log("ddd");
     const { data, statusCode } = await getStock(params.row.id);
     if (statusCode === 200) {
-      setColorList(data.colors || []);
+      setColorList(data || []);
+
+      console.log(data);
     }
     setIsLogout(true);
   };
@@ -34,16 +38,19 @@ function Counter({ params }) {
       >
         가격/재고
       </Button>
-      <RegisterModal
-        stockState={colorList}
-        isOpen={islogout}
-        onClose={modalHandleClose}
-        text={"가격/재고 등록"}
-      />
+      {islogout ? (
+        <RegisterModal
+          stockState={colorList}
+          isOpen={islogout}
+          onClose={modalHandleClose}
+          text={"가격/재고 등록"}
+        />
+      ) : null}
     </>
   );
 }
 
+// 판매 현황 버튼
 function List({ params }) {
   const [islogout, setIsLogout] = useState(false);
   const [corp, setCorp] = useState([]);
@@ -56,7 +63,16 @@ function List({ params }) {
       setCorp(data || []);
     }
     setIsLogout(true);
+    // return (
+    //   <CurrentStatus
+    //     stockState={corp || []}
+    //     isOpen={islogout}
+    //     onClose={modalHandleClose}
+    //     text={"판매 현황"}
+    //   />
+    // );
   };
+
   return (
     <>
       <Button
@@ -69,16 +85,12 @@ function List({ params }) {
       >
         판매 현황
       </Button>
-      <CurrentStatus
-        stockState={corp || []}
-        isOpen={islogout}
-        onClose={modalHandleClose}
-        text={"판매 현황"}
-      />
+      {/* 모달컴포넌트가 버튼만큼... */}
     </>
   );
 }
 
+// 테이블
 const sellColumns = [
   {
     field: "num",

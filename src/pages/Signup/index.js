@@ -14,6 +14,7 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
+import loginImg from "../../assets/img/login.png";
 
 const Label = styled(InputLabel)(({ theme }) => ({
   width: "8rem",
@@ -33,6 +34,14 @@ const Stacks = styled(Stack)(({ theme }) => ({
   alignItems: "center",
   marginBottom: "10px",
 }));
+
+const imgStyle = {
+  position: "absolute",
+  width: "647px",
+  top: "50%",
+  left: "36%",
+  transform: "translate(-50%,-50%)",
+};
 
 const Signup = () => {
   const [detailFile, setDetailFile] = useState("");
@@ -178,8 +187,19 @@ const Signup = () => {
         text={alertText}
         closeBtn={false}
       />
-      <Grid container alignItems={"center"}>
-        <Grid item width={"30rem"}>
+      <Grid item xs={8}>
+        <img src={loginImg} alt="dd" style={imgStyle} />
+      </Grid>
+      <Grid
+        alignItems={"center"}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          right: "5%",
+          transform: "translateY(-50%)",
+        }}
+      >
+        <Grid item>
           <h2>회원가입</h2>
           <Grid container direction="column">
             <Stacks direction="row" spacing={2}>

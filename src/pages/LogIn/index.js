@@ -17,6 +17,7 @@ import AlertModal from "@components/AlertModa";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { LoginUser } from "../../api/user";
+import loginImg from "../../assets/img/login.png";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -33,6 +34,21 @@ const LogIn = () => {
     textDecoration: "none",
     color: theme.palette.primary.main,
   }));
+
+  const imgStyle = {
+    position: "absolute",
+    width: "647px",
+    top: "50%",
+    left: "36%",
+    transform: "translate(-50%,-50%)",
+  };
+
+  // width: 60%;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   -50: 0;
+  //   left: 74px;
+  //   position: absolute;
 
   //비밀번호
   const [values, setValues] = useState({
@@ -112,7 +128,9 @@ const LogIn = () => {
         text={modalText}
         // closeBtn={false}
       />
-      <Grid item xs={8}></Grid>
+      <Grid item xs={8}>
+        <img src={loginImg} alt="dd" style={imgStyle} />
+      </Grid>
       <Grid container item xs={4} padding={"0 30px"} alignItems={"center"}>
         <Grid item textAlign={"center"} width={"16rem"} minWidth={"12rem"}>
           <h2>21세기 전파상 판매자 센터</h2>

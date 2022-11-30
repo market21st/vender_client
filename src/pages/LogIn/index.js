@@ -90,6 +90,7 @@ const LogIn = () => {
       console.log(user);
       const { data, message } = await LoginUser({ firebaseUid: uid });
       if (message == "OK") {
+        window.location.reload();
         navigate("/");
       }
     } catch ({ message }) {

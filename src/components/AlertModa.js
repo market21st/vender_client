@@ -23,6 +23,7 @@ const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
   if (text && text?.includes("가입이 완료")) {
     onClose = nav;
   }
+
   return (
     <Modal
       open={isOpen}

@@ -14,10 +14,8 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
-
-// const auth = getAuth();
-// // const user = auth.currentUser;
-// console.log(auth);
+import loginImg from "../../assets/img/login.png";
+import { SafetyCheck } from "@mui/icons-material";
 
 const Label = styled(InputLabel)(({ theme }) => ({
   width: "8rem",
@@ -38,20 +36,18 @@ const Stacks = styled(Stack)(({ theme }) => ({
   marginBottom: "10px",
 }));
 
+const imgStyle = {
+  position: "absolute",
+  width: "647px",
+  top: "50%",
+  left: "36%",
+  transform: "translate(-50%,-50%)",
+};
+
 const Signup = () => {
   const navigate = useNavigate();
-
-  // const [detailUrl, setdetailUrl] = useState("");
   const [detailFile, setDetailFile] = useState("");
-
-  // // 사업자등록증
-  // const detailPreview = () => {
-  //   // if (!detailFile) return false;
-  //   // const reader = new FileReader();
-  //   // reader.readAsDataURL(detailFile[0]);
-  //   setdetailUrl(detailFile[0]);
-  // };
-
+  const [check, setCheck] = useState(false);
   // 파이어베이스 회원가입
   const [autoInfo, setAuthInfo] = useState({
     id: "",
@@ -64,22 +60,23 @@ const Signup = () => {
     name: "",
     bankName: "",
     bankAccount: "",
-    bizType: "",
-    taxType: "",
+    bizType: "개인사업자",
+    taxType: "단위과세",
+    bizNum: "",
     adminName: "",
     phone: "",
     address: "",
   });
 
   //사업자 분류
-  const [biz, setBiz] = useState("");
+  const [biz, setBiz] = useState("개인사업자");
   const bizChange = (e) => {
     setBiz(e.target.value);
     setUserInfo({ ...userInfo, bizType: e.target.value });
   };
 
   //과세유형
-  const [tax, setTax] = useState("");
+  const [tax, setTax] = useState("단위과세");
   const taxChange = (e) => {
     setTax(e.target.value);
     setUserInfo({ ...userInfo, taxType: e.target.value });
@@ -88,6 +85,7 @@ const Signup = () => {
   // 파이어베이스 가입 정보
   const { id, password, passwordConfirm } = autoInfo;
   function onAuthChange(e) {
+    if (e.target.id == "id") setCheck(false);
     const { value, id } = e.target;
     setAuthInfo({
       ...autoInfo,
@@ -96,17 +94,6 @@ const Signup = () => {
   }
 
   // 회원가입 정보
-  const {
-    name,
-    bankName,
-    bankAccount,
-    bizType,
-    taxType,
-    adminName,
-    phone,
-    address,
-    bizNum,
-  } = userInfo;
   function InfoChange(e) {
     const { value, id } = e.target;
     setUserInfo({
@@ -115,16 +102,39 @@ const Signup = () => {
     });
   }
   const formData = new FormData();
-  console.log(passwordConfirm, password);
-  // 가입하기 클릭시
+
   const join = async (e) => {
     if (e) e.preventDefault();
+    if (check == false) {
+      setOpenModal1(true);
+      setAlertText("이메일 중복확인을 해주세요.");
+      return;
+    }
 
-    // 유효성 검사 추가
-    if (password != passwordConfirm) {
+    if (password.length < 7) {
+      setOpenModal1(true);
+      setAlertText("비밀번호를 8글자 이상 입력해주세요.");
+      return;
+    }
+
+    if (password != passwordConfirm || password === "") {
       setOpenModal1(true);
       setAlertText("비밀번호를 확인해주세요.");
       return;
+    }
+
+    if (detailFile == "") {
+      setOpenModal1(true);
+      setAlertText("사업자등록증을 첨부해주세요.");
+      return;
+    }
+
+    for (let key in userInfo) {
+      if (userInfo[key] === "") {
+        setOpenModal1(true);
+        setAlertText("모든 항목은 필수 입력 항목입니다.");
+        return;
+      }
     }
 
     const auth = getAuth();
@@ -143,9 +153,6 @@ const Signup = () => {
   // Signup Api
   const addUserInfo = async (e) => {
     if (e) e.preventDefault();
-
-    console.log(userInfo);
-
     for (let key in userInfo) {
       formData.append(key, userInfo[key]);
     }
@@ -154,8 +161,10 @@ const Signup = () => {
     // 추가 리스트
     const { data, statusCode } = await SignupUser(formData);
     if (statusCode === 200) {
-      console.log("회원가입 성공");
-      console.log(data);
+      setOpenModal1(true);
+      setAlertText(
+        "가입이 완료되었습니다. 가입승인까지 최대 3일이 걸릴 수 있습니다."
+      );
     }
   };
 
@@ -169,10 +178,12 @@ const Signup = () => {
     if (statusCode === 200) {
       setOpenModal1(true);
       setAlertText("사용가능한 이메일입니다.");
+      setCheck(true);
     }
     if (statusCode === 400) {
       setOpenModal1(true);
       setAlertText("이미 사용중인 이메일입니다.");
+      setCheck(false);
     }
   };
 
@@ -193,9 +204,19 @@ const Signup = () => {
         text={alertText}
         closeBtn={false}
       />
-      <Grid container alignItems={"center"}>
-        <Grid item width={"30rem"}>
-          <h2>회원가입</h2>
+      <Grid item xs={8}>
+        <img src={loginImg} alt="dd" style={imgStyle} />
+      </Grid>
+      <Grid
+        alignItems={"center"}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          right: "5%",
+          transform: "translateY(-50%)",
+        }}
+      >
+        <Grid item sx={{ position: "relative" }}>
           <Grid container direction="column">
             <Stacks direction="row" spacing={2}>
               <Label htmlFor="id" required>
@@ -267,7 +288,6 @@ const Signup = () => {
               </Label>
               <Select
                 value={biz}
-                // defaultValue={"개인사업자"}
                 id="bizType"
                 onChange={bizChange}
                 displayEmpty
@@ -283,7 +303,7 @@ const Signup = () => {
               <Label required id="taxType">
                 과세유형
               </Label>
-              <SelectBox
+              <Select
                 value={tax}
                 id="taxType"
                 onChange={taxChange}
@@ -292,11 +312,9 @@ const Signup = () => {
                 size="small"
                 sx={{ width: "12.2rem" }}
               >
-                <MenuItem autoFocus value="단위과세">
-                  단위과세
-                </MenuItem>
+                <MenuItem value="단위과세">단위과세</MenuItem>
                 <MenuItem value="간이과세">간이과세</MenuItem>
-              </SelectBox>
+              </Select>
             </Stacks>
             <Stacks direction="row" spacing={2}>
               <Label htmlFor="bizNum" required>
@@ -360,10 +378,9 @@ const Signup = () => {
               />
             </Stacks>
           </Grid>
-
           <Button
             variant="outlined" //contained 활성화
-            sx={{ marginTop: 3 }}
+            sx={{ marginTop: 3, position: "absolute", right: "22%" }}
             onClick={join}
           >
             가입하기

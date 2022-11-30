@@ -1,11 +1,12 @@
 import Button from "@mui/material/Button";
 import { DataGrid, GridColDef, GridApi, GridCellValue } from "@mui/x-data-grid";
 import { useState } from "react";
-import { getStock } from "src/api/sell";
+import { getCorp, getStock } from "src/api/sell";
 // components
 import RegisterModal from "@pages/Sell/RegisterModal";
 import CurrentStatus from "@pages/Sell/CurrentStatus";
 
+// 가격/재고 버튼
 function Counter({ params }) {
   const [islogout, setIsLogout] = useState(false);
   const modalHandleClose = () => {
@@ -15,10 +16,12 @@ function Counter({ params }) {
   const [colorList, setColorList] = useState([]);
 
   const onClick = async () => {
+    console.log("ddd");
     const { data, statusCode } = await getStock(params.row.id);
     if (statusCode === 200) {
-      console.log(data.colors);
-      setColorList(data.colors || []);
+      setColorList(data || []);
+
+      console.log(data);
     }
     setIsLogout(true);
   };
@@ -35,24 +38,33 @@ function Counter({ params }) {
       >
         가격/재고
       </Button>
-      <RegisterModal
-        stock={colorList}
-        isOpen={islogout}
-        onClose={modalHandleClose}
-        text={"가격/재고 등록"}
-      />
+      {islogout ? (
+        <RegisterModal
+          stockState={colorList}
+          isOpen={islogout}
+          onClose={modalHandleClose}
+          text={"가격/재고 등록"}
+        />
+      ) : null}
     </>
   );
 }
 
-function List() {
+// 판매 현황 버튼
+function List({ params }) {
   const [islogout, setIsLogout] = useState(false);
+  const [corp, setCorp] = useState([]);
   const modalHandleClose = () => {
     setIsLogout(false);
   };
-  const modalHandleOpen = () => {
+  const modalHandleOpen = async () => {
+    const { data, statusCode } = await getCorp(params.row.id);
+    if (statusCode === 200) {
+      setCorp(data || []);
+    }
     setIsLogout(true);
   };
+
   return (
     <>
       <Button
@@ -65,15 +77,19 @@ function List() {
       >
         판매 현황
       </Button>
-      <CurrentStatus
-        isOpen={islogout}
-        onClose={modalHandleClose}
-        text={"판매 현황"}
-      />
+      {islogout ? (
+        <CurrentStatus
+          stockState={corp || []}
+          isOpen={islogout}
+          onClose={modalHandleClose}
+          text={"판매 현황"}
+        />
+      ) : null}
     </>
   );
 }
 
+// 테이블
 const sellColumns = [
   {
     field: "num",
@@ -118,7 +134,7 @@ const sellColumns = [
         console.log(params.id);
       };
 
-      return <List />;
+      return <List params={params} />;
     },
   },
 ];

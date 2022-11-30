@@ -87,22 +87,26 @@ const LogIn = () => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, id, pw);
       const { uid } = user;
+      console.log(user);
       const { data, message } = await LoginUser({ firebaseUid: uid });
       if (message == "OK") {
-        window.location.reload();
         navigate("/");
       }
     } catch ({ message }) {
+      console.log(message);
       if (message.includes("wrong-password")) {
         setModalText("아이디/비밀번호를 확인해주세요.");
+        setOpenModal1(true);
         return;
       }
       if (message.includes("invalid-email")) {
         setModalText("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+        setOpenModal1(true);
         return;
       }
       if (message.includes("user-not-found")) {
         setModalText("존재하지 않는 회원입니다.");
+        setOpenModal1(true);
         return;
       }
       setOpenModal1(true);

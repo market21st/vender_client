@@ -15,15 +15,30 @@ import AlertModal from "@components/AlertModa";
 import { editStock } from "src/api/sell";
 
 //저장버튼+확인모달
-const ChildModals = ({ stockLists, price, id }) => {
+const ChildModals = ({ stockLists, price, id, total }) => {
   const [open, setOpen] = useState(false);
+  const [text, setText] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const modalHandleClose = () => {
+    setIsOpen2(false);
+  };
 
   const handleOpen = async () => {
-    console.log(stockLists);
-    console.log(price);
-    console.log(id);
+    if (price === null || price == 0) {
+      setOpen(true);
+      setText("가격을 0원으로 등록 불가능합니다.");
+      return;
+    }
+    setIsOpen2(true);
+  };
 
-    const { data, statusCode } = await editStock(id, stockLists, price);
+  const edit = async (e) => {
+    console.log("eeeee");
+    const { statusCode } = await editStock(id, stockLists, price);
+    if (statusCode === 200) {
+      console.log("200");
+      window.location.reload();
+    }
   };
 
   const handleClose = () => {
@@ -39,11 +54,31 @@ const ChildModals = ({ stockLists, price, id }) => {
       >
         저장
       </Button>
-      <AlertModal
-        isOpen={open}
-        onClose={handleClose}
-        text={"해당 상품의 판매를 안하겠습니까?"}
-      />
+      <AlertModal isOpen={open} onClose={handleClose} text={text} />
+      <Modal
+        open={isOpen2}
+        onClose={modalHandleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            가격 {price}원, 총 재고수량 {total}개로 등록하시겠습니까?
+          </Typography>
+          <Grid container justifyContent={"flex-end"} mt={3}>
+            <Button
+              variant="outlined"
+              sx={{ marginRight: "13px" }}
+              onClick={modalHandleClose}
+            >
+              아니요
+            </Button>
+            <Button variant="outlined" onClick={edit}>
+              네
+            </Button>
+          </Grid>
+        </Box>
+      </Modal>
     </>
   );
 };
@@ -110,65 +145,68 @@ const RegisterModal = ({ isOpen, onClose, text, stockState }) => {
   ];
 
   return (
-    <Modal
-      sx={gridBtm}
-      open={isOpen}
-      onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
-          {text}
-        </Typography>
-        <Stacks direction="row" spacing={2}>
-          <Item htmlFor="price">판매가격</Item>
-          <Item2
-            type="number"
-            id="price"
-            size="small"
-            value={totalPrice || ""}
-            onChange={(e) => setTotalPrice(e.target.value)}
-            sx={{ width: "30%" }}
-          ></Item2>
-          <Typography>원</Typography>
-        </Stacks>
-        <Stacks direction="row" spacing={2}>
-          <Item htmlFor="price">총 재고</Item>
-          <Grid textAlign={"right"}>
-            <Typography variant="subtitle1" textAlign={"left"} width={"6rem"}>
-              {total}개
-            </Typography>
-          </Grid>
-        </Stacks>
-        <DataGrid
-          sx={gridBtm}
-          autoHeight
-          rows={stockState?.colors}
-          cell--textCenter
-          columns={sellColumns}
-          disableColumnMenu
-          getRowId={(row) => row.internalId}
-        />
-        <Grid container justifyContent={"flex-end"} mt={10}>
-          <Buttons variant="outlined" sx={{ marginRight: "13px" }}>
-            초기화
-          </Buttons>
-          <Buttons
-            variant="outlined"
-            sx={{ marginRight: "3px" }}
-            onClick={onClose}
-          >
-            닫기
-          </Buttons>
-          <ChildModals
-            stockLists={stockList}
-            price={totalPrice}
-            id={stockState.id}
+    <>
+      <Modal
+        sx={gridBtm}
+        open={isOpen}
+        onClose={onClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" mb={3}>
+            {text}
+          </Typography>
+          <Stacks direction="row" spacing={2}>
+            <Item htmlFor="price">판매가격</Item>
+            <Item2
+              type="number"
+              id="price"
+              size="small"
+              value={totalPrice || ""}
+              onChange={(e) => setTotalPrice(e.target.value)}
+              sx={{ width: "30%" }}
+            ></Item2>
+            <Typography>원</Typography>
+          </Stacks>
+          <Stacks direction="row" spacing={2}>
+            <Item htmlFor="price">총 재고</Item>
+            <Grid textAlign={"right"}>
+              <Typography variant="subtitle1" textAlign={"left"} width={"6rem"}>
+                {total}개
+              </Typography>
+            </Grid>
+          </Stacks>
+          <DataGrid
+            sx={gridBtm}
+            autoHeight
+            rows={stockState?.colors}
+            cell--textCenter
+            columns={sellColumns}
+            disableColumnMenu
+            getRowId={(row) => row.internalId}
           />
-        </Grid>
-      </Box>
-    </Modal>
+          <Grid container justifyContent={"flex-end"} mt={10}>
+            {/* <Buttons variant="outlined" sx={{ marginRight: "13px" }}>
+              초기화
+            </Buttons> */}
+            <Buttons
+              variant="outlined"
+              sx={{ marginRight: "3px" }}
+              onClick={onClose}
+            >
+              닫기
+            </Buttons>
+            <ChildModals
+              stockLists={stockList}
+              price={totalPrice}
+              id={stockState.id}
+              total={total}
+            />
+          </Grid>
+        </Box>
+      </Modal>
+    </>
   );
 };
 

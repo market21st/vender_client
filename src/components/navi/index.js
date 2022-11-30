@@ -27,10 +27,10 @@ const Nav = () => {
   }));
 
   const [islogout, setIsLogout] = useState(false);
-  const modalHandleClose = () => {
+  const modalHandleClose = async () => {
     setIsLogout(false);
     window.location.reload();
-    navigator("/");
+    await navigator("/");
   };
 
   const getBiz = () => {

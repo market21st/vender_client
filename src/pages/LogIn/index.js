@@ -43,13 +43,6 @@ const LogIn = () => {
     transform: "translate(-50%,-50%)",
   };
 
-  // width: 60%;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   -50: 0;
-  //   left: 74px;
-  //   position: absolute;
-
   //비밀번호
   const [values, setValues] = useState({
     amount: "",

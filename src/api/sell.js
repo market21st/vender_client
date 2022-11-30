@@ -36,6 +36,8 @@ export const editStock = async (id, list, price) => {
       price: Number(price),
     };
     const res = await instance.put(`/listing/stock/${id}`, params);
+    console.log(res);
+    return res.data;
   } catch (e) {
     console.log(e);
   }

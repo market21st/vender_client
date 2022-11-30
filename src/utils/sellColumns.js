@@ -63,14 +63,6 @@ function List({ params }) {
       setCorp(data || []);
     }
     setIsLogout(true);
-    // return (
-    //   <CurrentStatus
-    //     stockState={corp || []}
-    //     isOpen={islogout}
-    //     onClose={modalHandleClose}
-    //     text={"판매 현황"}
-    //   />
-    // );
   };
 
   return (
@@ -85,7 +77,14 @@ function List({ params }) {
       >
         판매 현황
       </Button>
-      {/* 모달컴포넌트가 버튼만큼... */}
+      {islogout ? (
+        <CurrentStatus
+          stockState={corp || []}
+          isOpen={islogout}
+          onClose={modalHandleClose}
+          text={"판매 현황"}
+        />
+      ) : null}
     </>
   );
 }

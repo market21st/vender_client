@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button, Box, Typography, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -14,10 +15,14 @@ const style = {
 };
 
 const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const nav = () => navigate("/");
+  if (text && text?.includes("가입이 완료")) {
+    onClose = nav;
+  }
   return (
     <Modal
       open={isOpen}

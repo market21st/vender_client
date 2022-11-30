@@ -78,6 +78,7 @@ const Nav = () => {
             cookies.remove("refreshToken");
             cookies.remove("accessToken");
             setIsLogout(true);
+            navigator("/");
           }}
         >
           로그아웃

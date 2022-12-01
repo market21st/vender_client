@@ -18,7 +18,7 @@ import loginImg from "../../assets/img/login.png";
 import { SafetyCheck } from "@mui/icons-material";
 
 const Label = styled(InputLabel)(({ theme }) => ({
-  width: "8rem",
+  width: "9rem",
   color: theme.palette.text.secondary,
 }));
 
@@ -105,6 +105,15 @@ const Signup = () => {
 
   const join = async (e) => {
     if (e) e.preventDefault();
+
+    for (let key in userInfo) {
+      if (userInfo[key] === "") {
+        setOpenModal1(true);
+        setAlertText("모든 항목은 필수 입력 항목입니다.");
+        return;
+      }
+    }
+
     if (check == false) {
       setOpenModal1(true);
       setAlertText("이메일 중복확인을 해주세요.");
@@ -127,14 +136,6 @@ const Signup = () => {
       setOpenModal1(true);
       setAlertText("사업자등록증을 첨부해주세요.");
       return;
-    }
-
-    for (let key in userInfo) {
-      if (userInfo[key] === "") {
-        setOpenModal1(true);
-        setAlertText("모든 항목은 필수 입력 항목입니다.");
-        return;
-      }
     }
 
     const auth = getAuth();
@@ -228,7 +229,7 @@ const Signup = () => {
                 size="small"
                 onChange={onAuthChange}
               ></Input>
-              <Button variant="outlined" onClick={checkEmail}>
+              <Button variant="contained" onClick={checkEmail}>
                 중복확인
               </Button>
             </Stacks>
@@ -241,6 +242,7 @@ const Signup = () => {
                 id="password"
                 size="small"
                 onChange={onAuthChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
             <Stacks direction="row" spacing={2}>
@@ -252,13 +254,20 @@ const Signup = () => {
                 id="passwordConfirm"
                 size="small"
                 onChange={onAuthChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
             <Stacks direction="row" spacing={2}>
               <Label htmlFor="tradeName" required>
                 상호명
               </Label>
-              <Input type="text" id="name" size="small" onChange={InfoChange} />
+              <Input
+                type="text"
+                id="name"
+                size="small"
+                onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
+              />
             </Stacks>
             <Stacks direction="row" spacing={2}>
               <Label htmlFor="bankName" required>
@@ -269,6 +278,7 @@ const Signup = () => {
                 id="bankName"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
             <Stacks direction="row" spacing={2}>
@@ -280,6 +290,7 @@ const Signup = () => {
                 id="bankAccount"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
             <Stacks direction="row" spacing={2}>
@@ -293,7 +304,7 @@ const Signup = () => {
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
                 size="small"
-                sx={{ width: "12.2rem" }}
+                sx={{ width: "18.5rem" }}
               >
                 <MenuItem value="개인사업자">개인사업자</MenuItem>
                 <MenuItem value="법인사업자">법인사업자</MenuItem>
@@ -310,7 +321,7 @@ const Signup = () => {
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
                 size="small"
-                sx={{ width: "12.2rem" }}
+                sx={{ width: "18.5rem" }}
               >
                 <MenuItem value="단위과세">단위과세</MenuItem>
                 <MenuItem value="간이과세">간이과세</MenuItem>
@@ -325,6 +336,7 @@ const Signup = () => {
                 id="bizNum"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               ></Input>
               <></>
             </Stacks>
@@ -337,7 +349,7 @@ const Signup = () => {
                 id="image"
                 addept="img/*"
                 size="small"
-                sx={{ width: "12.2rem" }}
+                sx={{ width: "18.5rem" }}
                 onChange={(e) => {
                   setDetailFile(e.target.files[0]);
                 }}
@@ -352,6 +364,7 @@ const Signup = () => {
                 id="adminName"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
             <Stacks direction="row" spacing={2}>
@@ -363,6 +376,7 @@ const Signup = () => {
                 id="phone"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
 
@@ -375,16 +389,15 @@ const Signup = () => {
                 id="address"
                 size="small"
                 onChange={InfoChange}
+                sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>
+            <Grid container justifyContent={"flex-end"} pt={1}>
+              <Button variant="contained" onClick={join}>
+                가입하기
+              </Button>
+            </Grid>
           </Grid>
-          <Button
-            variant="outlined" //contained 활성화
-            sx={{ marginTop: 3, position: "absolute", right: "22%" }}
-            onClick={join}
-          >
-            가입하기
-          </Button>
         </Grid>
       </Grid>
     </Grid>

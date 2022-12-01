@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@config/firebase";
@@ -95,6 +95,10 @@ const Signup = () => {
   // 회원가입 정보
   function InfoChange(e) {
     const { value, id } = e.target;
+    // if (id === "phone") {
+
+    //   return;
+    // }
     setUserInfo({
       ...userInfo,
       [id]: value,
@@ -104,6 +108,7 @@ const Signup = () => {
 
   const join = async (e) => {
     if (e) e.preventDefault();
+    console.log(userInfo.phone.slice(0, 3) !== "010");
 
     for (let key in userInfo) {
       if (userInfo[key] === "") {
@@ -112,28 +117,29 @@ const Signup = () => {
         return;
       }
     }
-
     if (check == false) {
       setOpenModal1(true);
       setAlertText("이메일 중복확인을 해주세요.");
       return;
     }
-
     if (password.length < 7) {
       setOpenModal1(true);
       setAlertText("비밀번호를 8글자 이상 입력해주세요.");
       return;
     }
-
     if (password != passwordConfirm || password === "") {
       setOpenModal1(true);
       setAlertText("비밀번호를 확인해주세요.");
       return;
     }
-
     if (detailFile == "") {
       setOpenModal1(true);
       setAlertText("사업자등록증을 첨부해주세요.");
+      return;
+    }
+    if (userInfo.phone.slice(0, 3) !== "010") {
+      setOpenModal1(true);
+      setAlertText("전화번호 형식을 확인해주세요");
       return;
     }
 
@@ -374,6 +380,7 @@ const Signup = () => {
                 id="phone"
                 size="small"
                 onChange={InfoChange}
+                inputProps={{ maxLength: 11 }}
                 sx={{ width: "100%", pl: "50px" }}
               />
             </Stacks>

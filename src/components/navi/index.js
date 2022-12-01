@@ -3,7 +3,9 @@ import { Grid, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "@components/AlertModa";
+
 import { Cookies } from "react-cookie";
+import bizfile from "../../assets/img/bizfile.jpg";
 export const cookies = new Cookies();
 
 const Nav = () => {
@@ -34,7 +36,7 @@ const Nav = () => {
   };
 
   const getBiz = () => {
-    window.open(window.localStorage.getItem("bizFile", "_blank"));
+    window.open(bizfile, "_blank");
   };
 
   return (

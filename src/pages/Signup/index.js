@@ -155,7 +155,28 @@ const Signup = () => {
     } catch ({ code, message }) {}
   };
 
+  const test1 = async () => {
+    const { user } = await createUserWithEmailAndPassword(auth, id, password);
+    return user ? { uid: user.uid, email: user.email } : [];
+  };
+  const test2 = async ({ uid, email }) => {
+    const formData = new FormData();
+    formData.append("firebaseUid", uid && uid);
+    formData.append("email", email && email);
+    for (let key in userInfo) {
+      formData.append(key, userInfo[key]);
+    }
+    const { statusCode } = await SignupUser(formData);
+    return statusCode;
+  };
   // Signup Api
+  const pipe =
+    (...functions) =>
+    (value) => {
+      return functions.reduce((currentValue, currentFunc) => {
+        return currentFunc(currentValue);
+      }, value);
+    };
   const addUserInfo = async (e) => {
     if (e) e.preventDefault();
     for (let key in userInfo) {

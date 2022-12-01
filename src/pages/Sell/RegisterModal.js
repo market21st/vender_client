@@ -89,18 +89,21 @@ const RegisterModal = ({ isOpen, onClose, text, stockState }) => {
   const [total, setTotal] = useState(stockState?.totalStock);
   const [totalPrice, setTotalPrice] = useState(stockState?.price);
   const [value, setValue] = useState(0);
+
   const onChange = async (e) => {
     setValue(e.target.value);
     const index = stockList.findIndex((el) => el.color == e.target.name);
     const newStockList = [...stockList];
-
     if (index != -1) {
       newStockList[index] = {
         ...newStockList[index],
         stock: Number(e.target.value),
       };
       setStockList(newStockList);
-      await onAdd();
+      const lists = newStockList.reduce((sum, currentObject) => {
+        return sum + currentObject.stock;
+      }, 0);
+      setTotal(lists);
     }
   };
 
@@ -108,6 +111,7 @@ const RegisterModal = ({ isOpen, onClose, text, stockState }) => {
     const lists = stockList.reduce((sum, currentObject) => {
       return sum + currentObject.stock;
     }, 0);
+
     setTotal(lists);
   };
 

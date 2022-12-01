@@ -15,7 +15,7 @@ import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "@components/AlertModa";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase";
+import { auth } from "@config/firebase";
 import { LoginUser } from "../../api/user";
 import loginImg from "../../assets/img/login.png";
 

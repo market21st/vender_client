@@ -87,11 +87,17 @@ const LogIn = () => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, id, pw);
       const { uid } = user;
-      console.log(user);
-      const { data, message } = await LoginUser({ firebaseUid: uid });
+      const { data, message, statusCode } = await LoginUser({
+        firebaseUid: uid,
+      });
       if (message == "OK") {
         window.location.reload();
         navigate("/");
+      }
+      if (statusCode === 403) {
+        setModalText(message);
+        setOpenModal1(true);
+        return;
       }
     } catch ({ message }) {
       console.log(message);

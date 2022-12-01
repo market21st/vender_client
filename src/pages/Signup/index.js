@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@config/firebase";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { SignupUser, EmailCheck } from "../../api/user";
 import AlertModal from "@components/AlertModa";
 import {
@@ -15,7 +15,6 @@ import {
   Stack,
 } from "@mui/material";
 import loginImg from "../../assets/img/login.png";
-import { SafetyCheck } from "@mui/icons-material";
 
 const Label = styled(InputLabel)(({ theme }) => ({
   width: "9rem",
@@ -138,7 +137,6 @@ const Signup = () => {
       return;
     }
 
-    const auth = getAuth();
     try {
       const { user } = await createUserWithEmailAndPassword(auth, id, password);
       const { uid, email } = user;

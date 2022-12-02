@@ -89,7 +89,7 @@ const SellList = () => {
   }, []);
 
   return (
-    <Grid container spacing={1} sx={{ p: 3 }}>
+    <Grid container sx={{ p: 5 }}>
       <Grid item xs={12} mb={2}>
         <CardHeader title="판매 관리" />
         <Card>
@@ -97,7 +97,7 @@ const SellList = () => {
             <Grid container rowSpacing={2}>
               <Grid container item>
                 <Grid container item xs={3} alignItems={"center"}>
-                  <Grid item xs={3} textAlign={"right"} marginRight={2}>
+                  <Grid item xs={3} textAlign={"center"} marginRight={1}>
                     제품명
                   </Grid>
                   <Grid item xs={8}>
@@ -112,7 +112,7 @@ const SellList = () => {
                   </Grid>
                 </Grid>
                 <Grid container item xs={3} alignItems={"center"}>
-                  <Grid item xs={5} textAlign={"right"} marginRight={2}>
+                  <Grid item xs={5} textAlign={"center"} marginRight={1}>
                     가격등록여부
                   </Grid>
                   <Grid item xs={5}>
@@ -139,7 +139,7 @@ const SellList = () => {
                   </Grid>
                 </Grid>
                 <Grid container item xs={2} alignItems={"center"}>
-                  <Grid item xs={3} textAlign={"right"} marginRight={2}>
+                  <Grid item xs={3} textAlign={"center"} marginRight={2}>
                     등급
                   </Grid>
                   <Grid item xs={8}>

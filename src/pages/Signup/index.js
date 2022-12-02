@@ -39,7 +39,7 @@ const imgStyle = {
   position: "absolute",
   width: "647px",
   top: "50%",
-  left: "36%",
+  left: "33%",
   transform: "translate(-50%,-50%)",
 };
 
@@ -148,8 +148,8 @@ const Signup = () => {
       const { uid, email } = user;
       formData.append("firebaseUid", uid && uid);
       formData.append("email", email && email);
-
-      console.log(uid, email, userInfo);
+      const a = Promise.all(pipe(test1, test2));
+      // console.log(uid, email, userInfo);
 
       await addUserInfo();
     } catch ({ code, message }) {}
@@ -159,6 +159,7 @@ const Signup = () => {
     const { user } = await createUserWithEmailAndPassword(auth, id, password);
     return user ? { uid: user.uid, email: user.email } : [];
   };
+
   const test2 = async ({ uid, email }) => {
     const formData = new FormData();
     formData.append("firebaseUid", uid && uid);
@@ -169,7 +170,7 @@ const Signup = () => {
     const { statusCode } = await SignupUser(formData);
     return statusCode;
   };
-  // Signup Api
+
   const pipe =
     (...functions) =>
     (value) => {
@@ -177,6 +178,7 @@ const Signup = () => {
         return currentFunc(currentValue);
       }, value);
     };
+
   const addUserInfo = async (e) => {
     if (e) e.preventDefault();
     for (let key in userInfo) {
